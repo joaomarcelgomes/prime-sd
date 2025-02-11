@@ -1,0 +1,72 @@
+[
+  {
+    "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
+    "Method": "Create",
+    "RelativePath": "User",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
+    "Method": "Retrieve",
+    "RelativePath": "User",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
+    "Method": "Update",
+    "RelativePath": "User",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
+    "Method": "Delete",
+    "RelativePath": "User",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
