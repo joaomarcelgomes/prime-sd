@@ -154,10 +154,10 @@ C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.O
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.OrderSystem.Order.API.props
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.OrderSystem.Order.API.props
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\OrderSys.CCB7FBDB.Up2Date
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\OrderSystem.Order.API.dll
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\refint\OrderSystem.Order.API.dll
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\OrderSystem.Order.API.pdb
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\OrderSystem.Order.API.genruntimeconfig.cache
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\ref\OrderSystem.Order.API.dll
+C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
