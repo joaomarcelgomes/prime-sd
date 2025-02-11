@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "login",
-        "Type": "OrderSystem.Order.API.Models.DTOs.LoginRequest",
+        "Type": "OrderSystem.Order.API.Models.DTOs.Auth.LoginRequest",
         "IsRequired": true
       }
     ],
@@ -26,22 +26,48 @@
     ]
   },
   {
-    "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
-    "Method": "Create",
-    "RelativePath": "User",
+    "ContainingType": "OrderSystem.Order.API.Controllers.OrderController",
+    "Method": "CreateOrder",
+    "RelativePath": "Order",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "user",
-        "Type": "OrderSystem.Order.API.Models.DTOs.UserRequest",
+        "Name": "order",
+        "Type": "OrderSystem.Order.API.Models.DTOs.Order.OrderRequest",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.User.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "OrderSystem.Order.API.Controllers.OrderController",
+    "Method": "RetrieveAllOrdersByUser",
+    "RelativePath": "Order",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.User.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -53,7 +79,33 @@
   },
   {
     "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
-    "Method": "Retrieve",
+    "Method": "CreateUser",
+    "RelativePath": "User",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "user",
+        "Type": "OrderSystem.Order.API.Models.DTOs.User.UserRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.User.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
+    "Method": "RetrieveUser",
     "RelativePath": "User",
     "HttpMethod": "GET",
     "IsController": true,
@@ -67,7 +119,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.User.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -79,7 +131,7 @@
   },
   {
     "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
-    "Method": "Update",
+    "Method": "UpdateUser",
     "RelativePath": "User",
     "HttpMethod": "PUT",
     "IsController": true,
@@ -87,13 +139,13 @@
     "Parameters": [
       {
         "Name": "userUpdate",
-        "Type": "OrderSystem.Order.API.Model.User",
+        "Type": "OrderSystem.Order.API.Models.User",
         "IsRequired": true
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.User.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -105,7 +157,7 @@
   },
   {
     "ContainingType": "OrderSystem.Order.API.Controllers.UserController",
-    "Method": "Delete",
+    "Method": "DeleteUser",
     "RelativePath": "User",
     "HttpMethod": "DELETE",
     "IsController": true,
@@ -119,7 +171,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "OrderSystem.Order.API.Models.DTOs.Result\u00601[[OrderSystem.Order.API.Models.DTOs.User.UserViewModel, OrderSystem.Order.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

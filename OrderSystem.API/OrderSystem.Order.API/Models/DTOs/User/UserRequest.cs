@@ -1,4 +1,4 @@
-﻿namespace OrderSystem.Order.API.Models.DTOs
+﻿namespace OrderSystem.Order.API.Models.DTOs.User
 {
     public class UserRequest
     {

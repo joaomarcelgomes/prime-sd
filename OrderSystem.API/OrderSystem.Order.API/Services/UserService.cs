@@ -1,6 +1,7 @@
 ﻿using OrderSystem.Order.API.Database;
-using OrderSystem.Order.API.Model;
+using OrderSystem.Order.API.Models;
 using OrderSystem.Order.API.Models.DTOs;
+using OrderSystem.Order.API.Models.DTOs.User;
 using OrderSystem.Order.API.Services.Interfaces;
 
 namespace OrderSystem.Order.API.Services

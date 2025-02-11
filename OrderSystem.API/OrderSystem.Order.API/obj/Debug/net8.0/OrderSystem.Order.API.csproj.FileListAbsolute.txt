@@ -160,7 +160,6 @@ C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.O
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\OrderSystem.Order.API.pdb
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\OrderSystem.Order.API.genruntimeconfig.cache
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\ref\OrderSystem.Order.API.dll
-C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\bin\Debug\net8.0\Microsoft.Bcl.Memory.dll
@@ -171,3 +170,4 @@ C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.O
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\kleni\OneDrive\Desktop\Workspace\prime-sd\OrderSystem.API\OrderSystem.Order.API\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

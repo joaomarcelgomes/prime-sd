@@ -2,10 +2,10 @@
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using OrderSystem.Order.API.Database;
-using OrderSystem.Order.API.Model;
+using OrderSystem.Order.API.Models;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Services.Interfaces;
-using LoginRequest = OrderSystem.Order.API.Models.DTOs.LoginRequest;
+using LoginRequest = OrderSystem.Order.API.Models.DTOs.Auth.LoginRequest;
 
 namespace OrderSystem.Order.API.Services
 {
