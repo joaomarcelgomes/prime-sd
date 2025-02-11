@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderSystem.Order.API.Model;
 using OrderSystem.Order.API.Models.DTOs;
@@ -17,7 +19,7 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Result<UserViewModel>> Create(UserRequest user)
+        public ActionResult<Result<UserViewModel>> Create([FromBody] UserRequest user)
         {
             var result = _userService.CreateUser(user);
 
@@ -30,8 +32,16 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Result<UserViewModel>> Retrieve(int id)
+        [Authorize]
+        public ActionResult<Result<UserViewModel>> Retrieve([FromQuery] int id)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
             var result = _userService.RetrieveUser(id);
             
             if(result.Success == false)
@@ -43,8 +53,17 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPut]
-        public ActionResult<Result<UserViewModel>> Update(User userUpdate)
+        [Authorize]
+        public ActionResult<Result<UserViewModel>> Update([FromBody] User userUpdate)
         {
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId != userUpdate.Id.ToString() && !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
             var result = _userService.UpdateUser(userUpdate);
 
             if (result.Success == false)
@@ -56,8 +75,16 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<Result<UserViewModel>> Delete(int id)
+        [Authorize]
+        public ActionResult<Result<UserViewModel>> Delete([FromQuery] int id)
         {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+            {
+                return Forbid();
+            }
+
             var result = _userService.DeleteUser(id);
 
             if (result.Success == false)

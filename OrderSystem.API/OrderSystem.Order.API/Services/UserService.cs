@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OrderSystem.Order.API.Database;
+﻿using OrderSystem.Order.API.Database;
 using OrderSystem.Order.API.Model;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Services.Interfaces;
@@ -19,7 +18,7 @@ namespace OrderSystem.Order.API.Services
             User createdUser = new User() {
                 Email = user.Email,
                 Name = user.Name,
-                Password = user.Password
+                Password = BCrypt.Net.BCrypt.HashPassword(user.Password)
             };
 
             _dbContext.Users.Add(createdUser);
@@ -28,7 +27,7 @@ namespace OrderSystem.Order.API.Services
             return new Result<UserViewModel>()
             {
                 Success = true,
-                Message = "Usuário cadastrado com sucesso",
+                Message = "Usuário cadastrado com sucesso.",
                 Data = new UserViewModel() {
                     Id = createdUser.Id,
                     Email = createdUser.Email,
@@ -45,7 +44,7 @@ namespace OrderSystem.Order.API.Services
                 return new Result<UserViewModel>()
                 {
                     Success = false,
-                    Message = "Usuário não encontrado",
+                    Message = "Usuário não encontrado.",
                     Data = new UserViewModel()
                 };
             }
@@ -53,7 +52,7 @@ namespace OrderSystem.Order.API.Services
             return new Result<UserViewModel>()
             {
                 Success = true,
-                Message = "Usuário encontrado",
+                Message = "Usuário encontrado.",
                 Data = new UserViewModel()
                 {
                     Id = user.Id,
@@ -79,7 +78,11 @@ namespace OrderSystem.Order.API.Services
 
             user.Name = userUpdate.Name ?? user.Name;
             user.Email = userUpdate.Email ?? user.Email;
-            user.Password = userUpdate.Password ?? user.Password;
+
+            if (!string.IsNullOrEmpty(userUpdate.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(userUpdate.Password); 
+            }
 
             _dbContext.SaveChanges();
 
