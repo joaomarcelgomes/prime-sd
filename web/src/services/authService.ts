@@ -1,6 +1,8 @@
+import config from "../config.ts";
+
 export async function loginUser(email: string, password: string) {
   try {
-    const response = await fetch("/api/login", {
+    const response = await fetch(`${config}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -21,7 +23,7 @@ export async function loginUser(email: string, password: string) {
 
 export async function registerUser(name: string, email: string, password: string) {
   try {
-    const response = await fetch("/api/register", {
+    const response = await fetch("${config}/api/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
