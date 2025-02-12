@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using OrderSystem.Order.API.Database;
+using OrderSystem.Order.API.Infrastructure.Database;
 
 #nullable disable
 

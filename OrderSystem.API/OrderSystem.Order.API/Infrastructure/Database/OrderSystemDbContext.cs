@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderSystem.Order.API.Models;
 
-namespace OrderSystem.Order.API.Database
+namespace OrderSystem.Order.API.Infrastructure.Database
 {
     public class OrderSystemDbContext : DbContext
     {
@@ -13,9 +13,9 @@ namespace OrderSystem.Order.API.Database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Models.Order>()
-                .HasOne(order => order.User) 
+                .HasOne(order => order.User)
                 .WithMany(user => user.Orders)
-                .HasForeignKey(order => order.UserId); 
+                .HasForeignKey(order => order.UserId);
         }
     }
 }

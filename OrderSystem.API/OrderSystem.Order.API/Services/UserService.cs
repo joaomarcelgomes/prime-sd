@@ -1,4 +1,4 @@
-﻿using OrderSystem.Order.API.Database;
+﻿using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Models;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.User;

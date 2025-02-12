@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using OrderSystem.Order.API.Database;
-using OrderSystem.Order.API.Models;
+﻿using OrderSystem.Order.API.Infrastructure.Database;
+using OrderSystem.Order.API.Infrastructure.ExternalServices;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.Order;
 using OrderSystem.Order.API.Services.Interfaces;
@@ -10,10 +9,11 @@ namespace OrderSystem.Order.API.Services
     public class OrderService : IOrderService
     {
         private OrderSystemDbContext _dbContext;
-
+        private RpcClient _rpcClient;
         public OrderService(OrderSystemDbContext dbContext)
         {
             _dbContext = dbContext;
+            _rpcClient = new RpcClient("http://localhost:8000/");
         }
 
         public Result<OrderViewModel> CreateOrder(OrderRequest order)
@@ -28,6 +28,8 @@ namespace OrderSystem.Order.API.Services
 
             _dbContext.Orders.Add(createdOrder);
             _dbContext.SaveChanges();
+
+            _rpcClient.Call("ProcessPayment", [createdOrder.Id]);
 
             return new Result<OrderViewModel>()
             {

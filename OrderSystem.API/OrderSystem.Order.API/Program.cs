@@ -2,7 +2,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OrderSystem.Order.API.Database;
+using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Services;
 using OrderSystem.Order.API.Services.Interfaces;
 
