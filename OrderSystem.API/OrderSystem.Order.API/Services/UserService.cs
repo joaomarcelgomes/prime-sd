@@ -14,9 +14,10 @@ namespace OrderSystem.Order.API.Services
             _dbContext = dbContext;
         }
 
-        public Result<UserViewModel> CreateUser(UserRequest user)
+        public Result CreateUser(UserRequest user)
         {
-            User createdUser = new User() {
+            User createdUser = new User
+            {
                 Email = user.Email,
                 Name = user.Name,
                 Password = BCrypt.Net.BCrypt.HashPassword(user.Password)
@@ -25,11 +26,12 @@ namespace OrderSystem.Order.API.Services
             _dbContext.Users.Add(createdUser);
             _dbContext.SaveChanges();
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário cadastrado com sucesso.",
-                Data = new UserViewModel() {
+                Data = new UserViewModel 
+                {
                     Id = createdUser.Id,
                     Email = createdUser.Email,
                     Name = createdUser.Name
@@ -37,12 +39,12 @@ namespace OrderSystem.Order.API.Services
             };
         }
 
-        public Result<UserViewModel> RetrieveUser(int id)
+        public Result RetrieveUser(int id)
         {
             var user = _dbContext.Users.FirstOrDefault(user => user.Id == id);
 
             if (user  == null) {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Usuário não encontrado.",
@@ -50,11 +52,11 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário encontrado.",
-                Data = new UserViewModel()
+                Data = new UserViewModel
                 {
                     Id = user.Id,
                     Email = user.Email,
@@ -63,13 +65,13 @@ namespace OrderSystem.Order.API.Services
             };
         }
 
-        public Result<UserViewModel> UpdateUser(User userUpdate)
+        public Result UpdateUser(UserRequest userUpdate, int id)
         {
-            var user = _dbContext.Users.FirstOrDefault(user => user.Id == userUpdate.Id);
+            var user = _dbContext.Users.FirstOrDefault(user => user.Id == id);
 
             if (user == null)
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Usuário não encontrado",
@@ -77,17 +79,18 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            user.Name = userUpdate.Name ?? user.Name;
-            user.Email = userUpdate.Email ?? user.Email;
+            if(!string.IsNullOrWhiteSpace(userUpdate.Name))
+                user.Name = userUpdate.Name;
+
+            if(!string.IsNullOrWhiteSpace(userUpdate.Email))
+                user.Email = userUpdate.Email;
 
             if (!string.IsNullOrEmpty(userUpdate.Password))
-            {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(userUpdate.Password); 
-            }
 
             _dbContext.SaveChanges();
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário atualizado com sucesso",
@@ -100,13 +103,13 @@ namespace OrderSystem.Order.API.Services
             };
         }
 
-        public Result<UserViewModel> DeleteUser(int id)
+        public Result DeleteUser(int id)
         {
             var user = _dbContext.Users.FirstOrDefault(user => user.Id == id);
 
             if (user == null)
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Usuário não encontrado",
@@ -117,7 +120,7 @@ namespace OrderSystem.Order.API.Services
             _dbContext.Remove(user);
             _dbContext.SaveChanges();
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário deletado com sucesso",

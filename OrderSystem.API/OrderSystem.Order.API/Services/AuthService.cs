@@ -44,13 +44,13 @@ namespace OrderSystem.Order.API.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public Result<string> Login(LoginRequest login)
+        public Result Login(LoginRequest login)
         {
             var user = _dbContext.Users.FirstOrDefault(user => user.Email == login.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
-                return new Result<string>()
+                return new Result
                 {
                     Success = false,
                     Message = "Credenciais inválidas.",
@@ -60,11 +60,14 @@ namespace OrderSystem.Order.API.Services
 
             var token = TokenGenerator(user);
 
-            return new Result<string>()
+            return new Result
             {
                 Success = true,
                 Message = "Autenticação bem-sucedida",
-                Data = token
+                Data = new {
+                    Token = token,
+                    UserId = user.Id
+                }
             };
         }
     }

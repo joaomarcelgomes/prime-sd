@@ -6,6 +6,6 @@ namespace OrderSystem.Order.API.Services.Interfaces
 {
     public interface IAuthService
     {
-        Result<string> Login(LoginRequest login);
+        Result Login(LoginRequest login);
     }
 }

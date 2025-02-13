@@ -6,95 +6,100 @@ using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.User;
 using OrderSystem.Order.API.Services.Interfaces;
 
-namespace OrderSystem.Order.API.Controllers
+namespace OrderSystem.Order.API.Controllers;
+
+[ApiController]
+[Route("api/user")]
+public class UserController(IUserService userService) : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class UserController : ControllerBase
+    [HttpPost]
+    public ActionResult CreateUser([FromBody] UserRequest user)
     {
-        private IUserService _userService { get; set; }
-
-        public UserController(IUserService userService) 
-        { 
-            _userService = userService;
-        }
-
-        [HttpPost]
-        public ActionResult<Result<UserViewModel>> CreateUser([FromBody] UserRequest user)
+        try
         {
-            var result = _userService.CreateUser(user);
+            var result = userService.CreateUser(user);
 
-            if (result.Success == false)
-            {
-                return BadRequest(result);
-            }
+            if (result.Success)
+                return Ok(result);
 
-            return Ok(result);
+            return BadRequest(result);
         }
-
-        [HttpGet]
-        [Authorize]
-        public ActionResult<Result<UserViewModel>> RetrieveUser([FromQuery] int id)
+        catch
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
-            var result = _userService.RetrieveUser(id);
-            
-            if(result.Success == false)
-            {
-                return NotFound(result);
-            }
-
-            return Ok(result);
+            return BadRequest(new { success = false, message = "Error ao tentar criar o usuário" });
         }
-
-        [HttpPut]
-        [Authorize]
-        public ActionResult<Result<UserViewModel>> UpdateUser([FromBody] User userUpdate)
-        {
-
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId != userUpdate.Id.ToString() && !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
-            var result = _userService.UpdateUser(userUpdate);
-
-            if (result.Success == false)
-            {
-                return BadRequest(result);
-            }
-
-            return Ok(result);
-        }
-
-        [HttpDelete]
-        [Authorize]
-        public ActionResult<Result<UserViewModel>> DeleteUser([FromQuery] int id)
-        {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
-            {
-                return Forbid();
-            }
-
-            var result = _userService.DeleteUser(id);
-
-            if (result.Success == false)
-            {
-                return NotFound(result);
-            }
-
-            return Ok(result);
-        }
-
     }
+
+    [HttpGet]
+    [Authorize]
+    public ActionResult RetrieveUser([FromQuery] int id)
+    {
+        Console.WriteLine(id);
+
+        var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+        {
+            return Forbid();
+        }
+
+        var result = userService.RetrieveUser(id);
+        
+        if(result.Success == false)
+        {
+            return NotFound(result);
+        }
+
+        return Ok(result);
+    }
+
+    [HttpPut("{id:int}")]
+    [Authorize]
+    public ActionResult<Result> UpdateUser(int id, [FromBody] UserRequest userUpdate)
+    {
+        try
+        {
+
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+                return Forbid();
+
+            var result = userService.UpdateUser(userUpdate, id);
+
+            if (result.Success)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
+        catch(Exception)
+        {
+            return BadRequest(new { success = false, message = "Error ao tentar atualizar o usuário" });
+        }
+    }
+
+    [HttpDelete("{id:int}")]
+    [Authorize]
+    public ActionResult<Result> DeleteUser(int id)
+    {
+        try
+        {
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+                return Forbid();
+
+            var result = userService.DeleteUser(id);
+
+            if (result.Success)
+                return Ok(result);
+
+            return NotFound(result);
+        }
+        catch(Exception)
+        {
+            return BadRequest(new { success = false, message = "Error ao tentar deletar o usuário" });
+        }
+    }
+
 }

@@ -1,28 +1,29 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Services.Interfaces;
 using LoginRequest = OrderSystem.Order.API.Models.DTOs.Auth.LoginRequest;
 
-namespace OrderSystem.Order.API.Controllers
+namespace OrderSystem.Order.API.Controllers;
+
+[ApiController]
+[Route("api/auth")]
+public class AuthController(IAuthService authService) : ControllerBase
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class AuthController : ControllerBase
+    [HttpPost("login")]
+    public ActionResult Login(LoginRequest login) 
     {
-        private IAuthService _authService;
-
-        public AuthController(IAuthService authService)
+        try
         {
-            _authService = authService;
+            var result = authService.Login(login);
+
+            if(result.Success)
+                return Ok(result);
+
+            return NoContent();
         }
-
-        [HttpPost("login")]
-        public ActionResult<Result<string>> Login(LoginRequest login) 
+        catch(Exception)
         {
-            var result = _authService.Login(login);
-
-            return Ok(result);
+            return BadRequest(new { success = false, message = "Error ao tentar fazer o login" });
         }
     }
 }
