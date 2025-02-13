@@ -16,7 +16,7 @@ namespace OrderSystem.Order.API.Services
             _rpcClient = new RpcClient("http://localhost:8000/");
         }
 
-        public Result<OrderViewModel> CreateOrder(OrderRequest order)
+        public Result CreateOrder(OrderRequest order)
         {
             Models.Order createdOrder = new Models.Order()
             {
@@ -31,7 +31,7 @@ namespace OrderSystem.Order.API.Services
 
             _rpcClient.Call("ProcessPayment", [createdOrder.Id]);
 
-            return new Result<OrderViewModel>()
+            return new Result()
             {
                 Success = true,
                 Message = "Pedido cadastrado com sucesso.",
@@ -46,7 +46,7 @@ namespace OrderSystem.Order.API.Services
             };
         }
 
-        public Result<List<OrderViewModel>> RetrieveAllOrdersByUser(int userId)
+        public Result RetrieveAllOrdersByUser(int userId)
         {
             var orders = _dbContext.Orders
                 .Where(order => order.UserId == userId)
@@ -61,7 +61,7 @@ namespace OrderSystem.Order.API.Services
 
             if (orders == null)
             {
-                return new Result<List<OrderViewModel>>()
+                return new Result
                 {
                     Success = true,
                     Message = "Nenhum pedido encontrado.",
@@ -69,7 +69,7 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            return new Result<List<OrderViewModel>>()
+            return new Result
             {
                 Success = true,
                 Message = "Todos os pedidos do usuário foram retornados.",

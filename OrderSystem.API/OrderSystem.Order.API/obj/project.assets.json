@@ -4041,31 +4041,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\kleni\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/joaomarcelgomes/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\kleni\\OneDrive\\Desktop\\Workspace\\prime-sd\\OrderSystem.API\\OrderSystem.Order.API\\OrderSystem.Order.API.csproj",
+      "projectUniqueName": "/home/joaomarcelgomes/dev/Prime/OrderSystem.API/OrderSystem.Order.API/OrderSystem.Order.API.csproj",
       "projectName": "OrderSystem.Order.API",
-      "projectPath": "C:\\Users\\kleni\\OneDrive\\Desktop\\Workspace\\prime-sd\\OrderSystem.API\\OrderSystem.Order.API\\OrderSystem.Order.API.csproj",
-      "packagesPath": "C:\\Users\\kleni\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\kleni\\OneDrive\\Desktop\\Workspace\\prime-sd\\OrderSystem.API\\OrderSystem.Order.API\\obj\\",
+      "projectPath": "/home/joaomarcelgomes/dev/Prime/OrderSystem.API/OrderSystem.Order.API/OrderSystem.Order.API.csproj",
+      "packagesPath": "/home/joaomarcelgomes/.nuget/packages/",
+      "outputPath": "/home/joaomarcelgomes/dev/Prime/OrderSystem.API/OrderSystem.Order.API/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\kleni\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/joaomarcelgomes/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -4136,7 +4129,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.102/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
