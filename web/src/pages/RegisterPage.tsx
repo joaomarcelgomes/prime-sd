@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useRegister } from "../hooks/useRegister";
-import { EmailFieldComponent, PasswordFieldComponent } from "../components/FieldComponents";
+import { FieldComponent, EmailFieldComponent, PasswordFieldComponent } from "../components/FieldComponents";
 import { UserAccessLayout } from "../layouts/UserAccessLayout";
-import { FieldComponent } from "../components/FieldComponents";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });

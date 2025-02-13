@@ -2,7 +2,7 @@ import config from "../config.ts";
 
 export async function loginUser(email: string, password: string) {
   try {
-    const response = await fetch(`${config}/api/login`, {
+    const response = await fetch(`${config.apiUrl}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -12,9 +12,13 @@ export async function loginUser(email: string, password: string) {
       throw new Error("Falha na autenticação. Verifique suas credenciais.");
     }
 
-    const data = await response.json();
-    localStorage.setItem("token", data.token);
-    return data;
+    const result = await response.json();
+
+    console.log(result);
+
+    localStorage.setItem("token", result.data.token);
+    localStorage.setItem("user-id", result.data.userId);
+    return result;
   } catch (error) {
     console.error("Erro no login:", error);
     throw error;
@@ -23,7 +27,7 @@ export async function loginUser(email: string, password: string) {
 
 export async function registerUser(name: string, email: string, password: string) {
   try {
-    const response = await fetch("${config}/api/register", {
+    const response = await fetch(`${config.apiUrl}/user`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
@@ -33,8 +37,8 @@ export async function registerUser(name: string, email: string, password: string
       throw new Error("Falha ao criar conta. Verifique os dados.");
     }
 
-    const data = await response.json();
-    return data;
+    const result = await response.json();
+    return result;
   } catch (error) {
     console.error("Erro ao registrar usuário:", error);
     throw error;

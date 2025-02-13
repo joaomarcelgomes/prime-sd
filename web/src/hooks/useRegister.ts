@@ -39,7 +39,7 @@ export function useRegister() {
 
     try {
       await registerUser(name, email, password);
-      navigate("/dashboard");
+      navigate("/");
     } catch (error) {
       setErrors({ ...newErrors, email: "E-mail já cadastrado ou erro na criação da conta." });
     } finally {
