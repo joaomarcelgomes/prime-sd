@@ -30,7 +30,7 @@ export function useAuth() {
     }
 
     try {
-      // await loginUser(email, password);
+      await loginUser(email, password);
       navigate("/orders");
     } catch (error) {
       setErrors({ email: "", password: "E-mail ou senha incorretos" });

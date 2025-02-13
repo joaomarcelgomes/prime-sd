@@ -1,9 +1,55 @@
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { FieldComponent, EmailFieldComponent, PasswordFieldComponent } from "../components/FieldComponents";
+import { deleteUser, getUser } from "../services/userService";
 import { MenuLayout } from "../layouts/MenuLayout";
+import { update } from "../hooks/updateUser";
+import ConfirmModal from "../components/ModalComponent";
+import { useNavigate } from "react-router-dom";
 
-const ProfilePage = () => {
+const  ProfilePage = () => {
+  const [user, setUser] = useState({ name: "", email: "" });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
+  const { handleUpdate, errors, success } = update();
+
+  const handleDeleteClick = () => {
+    setShowModal(true);
+  };
+
+  const handleConfirm = async () => {
+      setShowModal(false);
+      await deleteUser();
+      navigate("/");
+  };
+
+  const handleCancel = () => {
+      setShowModal(false);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setFormData({ ...formData, [event.target.name]: event.target.value });
+    };
+  
+    const handleSubmit = (event: React.FormEvent) => {
+      event.preventDefault();
+      handleUpdate(formData.name, formData.email, formData.password, formData.confirmPassword);
+
+      if(success)
+        window.location.reload();
+    };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const user = await getUser();
+      setUser(user);
+    };
+
+    fetchUser();
+  }, []);
 
   return (
     <MenuLayout nav="Profile">
@@ -13,20 +59,28 @@ const ProfilePage = () => {
 
           <div className="text-gray-700 space-y-1">
             <p className="text-sm">Nome</p>
-            <p className="font-medium">Maria Isabely</p>
+            <p className="font-medium">{user.name}</p>
 
             <p className="text-sm mt-4">E-Mail</p>
-            <p className="font-medium">m.isa@gmail.com</p>
+            <p className="font-medium">{user.email}</p>
           </div>
 
-          <button className="mt-6 w-full bg-neutral-500 text-black py-2 rounded-lg hover:bg-neutral-700" onClick={() => setIsModalOpen(true)}>
+          <button className="mt-6 cursor-pointer w-full bg-neutral-500 text-black py-2 rounded-lg hover:bg-neutral-700" onClick={() => setIsModalOpen(true)}>
             Editar Perfil
           </button>
-          <button className="mt-4 text-red-500 text-sm hover:underline">
+          <button className="mt-4 cursor-pointer text-red-500 text-sm hover:underline" onClick={handleDeleteClick}>
             Excluir Conta
           </button>
         </div>
       </div>
+
+      {showModal && (
+          <ConfirmModal
+              message="Tem certeza que deseja excluir?"
+              onConfirm={handleConfirm}
+              onCancel={handleCancel}
+          />
+      )}
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
@@ -40,41 +94,20 @@ const ProfilePage = () => {
             <h2 className="text-xl font-semibold text-center mb-4">Editar Perfil</h2>
 
             <form className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium">Nome</label>
-                <input
-                  type="text"
-                  className="w-full p-2 border rounded-md bg-gray-100"
-                  placeholder="Digite seu nome"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">E-Mail</label>
-                <input
-                  type="email"
-                  className="w-full p-2 border rounded-md bg-gray-100"
-                  placeholder="Digite seu e-mail"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Senha</label>
-                <input
-                  type="password"
-                  className="w-full p-2 border rounded-md bg-gray-100"
-                  placeholder="Digite sua senha"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Confirmar senha</label>
-                <input
-                  type="password"
-                  className="w-full p-2 border rounded-md bg-gray-100"
-                  placeholder="Confirme sua senha"
-                />
-              </div>
+              <FieldComponent label="Nome" name="name" value={formData.name} onChange={handleChange} error={errors.name} />
+              <EmailFieldComponent value={formData.email} onChange={handleChange} error={errors.email} />
+              <PasswordFieldComponent value={formData.password} onChange={handleChange} error={errors.password} />
+              <PasswordFieldComponent
+                label="Confirmar Senha"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                error={errors.confirmPassword}
+              />
               <button
                 type="submit"
                 className="mt-4 w-full bg-gray-500 text-white py-2 rounded-lg hover:bg-gray-600"
+                onClick={handleSubmit}
               >
                 Salvar Alterações
               </button>
@@ -85,6 +118,5 @@ const ProfilePage = () => {
     </MenuLayout>
   );
 };
-
 
 export default ProfilePage
