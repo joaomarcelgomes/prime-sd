@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore;
 using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Models;
 using OrderSystem.Order.API.Models.DTOs;
@@ -27,6 +28,19 @@ namespace OrderSystem.Order.API.Services
                 {
                     Success = false,
                     Message = "A senha precisa ter pelo menos 8 caracteres.",
+                    Data = new UserViewModel()
+                };
+            }
+
+            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
+            bool isValid = Regex.IsMatch(user.Email, pattern);
+
+            if(!isValid)
+            {
+                return new Result
+                {
+                    Success = false,
+                    Message = "E-mail inválido.",
                     Data = new UserViewModel()
                 };
             }
