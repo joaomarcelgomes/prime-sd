@@ -1,7 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrderSystem.Order.API.Models;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.User;
 using OrderSystem.Order.API.Services.Interfaces;
@@ -20,9 +19,9 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Result<UserViewModel>> CreateUser([FromBody] UserRequest user)
+        public async Task<ActionResult<Result<UserViewModel>>> CreateUser([FromBody] UserRequest user)
         {
-            var result = _userService.CreateUser(user);
+            var result = await _userService.CreateUser(user);
 
             if (result.Success == false)
             {
@@ -34,16 +33,16 @@ namespace OrderSystem.Order.API.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<Result<UserViewModel>> RetrieveUser([FromQuery] int id)
+        public async Task<ActionResult<Result<UserViewModel>>> RetrieveUser()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+            if (currentUserId == null || !int.TryParse(currentUserId, out _))
             {
-                return Forbid();
+                return BadRequest();
             }
 
-            var result = _userService.RetrieveUser(id);
+            var result = await _userService.RetrieveUser(int.Parse(currentUserId));
             
             if(result.Success == false)
             {
@@ -55,17 +54,16 @@ namespace OrderSystem.Order.API.Controllers
 
         [HttpPut]
         [Authorize]
-        public ActionResult<Result<UserViewModel>> UpdateUser([FromBody] User userUpdate)
+        public async Task<ActionResult<Result<UserViewModel>>> UpdateUser(UserRequest userUpdate)
         {
-
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (currentUserId != userUpdate.Id.ToString() && !User.IsInRole("Admin"))
+            if (currentUserId == null || !int.TryParse(currentUserId, out _))
             {
-                return Forbid();
+                return BadRequest();
             }
 
-            var result = _userService.UpdateUser(userUpdate);
+            var result = await _userService.UpdateUser(userUpdate, int.Parse(currentUserId));
 
             if (result.Success == false)
             {
@@ -77,16 +75,16 @@ namespace OrderSystem.Order.API.Controllers
 
         [HttpDelete]
         [Authorize]
-        public ActionResult<Result<UserViewModel>> DeleteUser([FromQuery] int id)
+        public async Task<ActionResult<Result<UserViewModel>>> DeleteUser()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (currentUserId != id.ToString() && !User.IsInRole("Admin"))
+            if (currentUserId == null || !int.TryParse(currentUserId, out _))
             {
-                return Forbid();
+                return BadRequest();
             }
 
-            var result = _userService.DeleteUser(id);
+            var result = await _userService.DeleteUser(int.Parse(currentUserId));
 
             if (result.Success == false)
             {

@@ -22,16 +22,16 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Result<UserViewModel>> CreateOrder([FromBody] OrderRequest order)
+        public async Task<ActionResult<Result<UserViewModel>>> CreateOrder([FromBody] OrderRequest order)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId != order.UserId.ToString() && !User.IsInRole("Admin"))
+            
+            if(currentUserId == null || !int.TryParse(currentUserId, out _))
             {
-                return Unauthorized();
+                return BadRequest();
             }
 
-            var result = _orderService.CreateOrder(order);
+            var result = await _orderService.CreateOrder(order, int.Parse(currentUserId));
 
             if (result.Success == false)
             {
@@ -43,16 +43,16 @@ namespace OrderSystem.Order.API.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<Result<UserViewModel>> RetrieveAllOrdersByUser([FromQuery] int userId)
+        public ActionResult<Result<UserViewModel>> RetrieveAllOrdersByUser()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (currentUserId != userId.ToString() && !User.IsInRole("Admin"))
+            if (currentUserId == null || !int.TryParse(currentUserId, out _))
             {
-                return Forbid();
+                return BadRequest();
             }
 
-            var result = _orderService.RetrieveAllOrdersByUser(userId);
+            var result = _orderService.RetrieveAllOrdersByUser(int.Parse(currentUserId));
 
             if (result.Success == false)
             {

@@ -1,4 +1,5 @@
-﻿using OrderSystem.Order.API.Infrastructure.Database;
+﻿using Microsoft.EntityFrameworkCore;
+using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Infrastructure.ExternalServices;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.Order;
@@ -16,20 +17,58 @@ namespace OrderSystem.Order.API.Services
             _rpcClient = new RpcClient("http://localhost:8000/");
         }
 
-        public Result<OrderViewModel> CreateOrder(OrderRequest order)
+        /*
+         * Cria um pedido e chama o cliente rpc que chama o método de processar pagamento do servidor rpc, atualizando após alguns segundos
+         * o status da compra no banco para "Pagamento realizado com sucesso"
+         */
+        public async Task<Result<OrderViewModel>> CreateOrder(OrderRequest order, int userId)
         {
             Models.Order createdOrder = new Models.Order()
             {
                 Price = order.Price,
                 Description = order.Description,
-                Status = order.Status,
-                UserId = order.UserId,
+                Status = "Aguardando pagamento",
+                UserId = userId,
             };
 
             _dbContext.Orders.Add(createdOrder);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
-            _rpcClient.Call("ProcessPayment", [createdOrder.Id]);
+            try
+            {
+                await _rpcClient.Call("ProcessPayment", [createdOrder.Id]);
+            }
+            catch (Exception)
+            {
+                createdOrder.Status = "Falha no processamento do pagamento";
+                await _dbContext.SaveChangesAsync();
+
+                return new Result<OrderViewModel>()
+                {
+                    Success = false,
+                    Message = "Falha no processamento do pagamento",
+                    Data = new OrderViewModel()
+                    {
+                        Id = createdOrder.Id,
+                        Price = order.Price,
+                        Description = createdOrder.Description,
+                        Status = createdOrder.Status,
+                        UserId = createdOrder.UserId,
+                    }
+                };
+            }
+
+            var finalOrderState = await _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == createdOrder.Id);
+
+            if (finalOrderState == null)
+            {
+                return new Result<OrderViewModel>()
+                {
+                    Success = false,
+                    Message = "Falha ao criar pedido.",
+                    Data = new OrderViewModel() { }
+                };
+            }
 
             return new Result<OrderViewModel>()
             {
@@ -37,15 +76,18 @@ namespace OrderSystem.Order.API.Services
                 Message = "Pedido cadastrado com sucesso.",
                 Data = new OrderViewModel()
                 {
-                    Id = createdOrder.Id,
-                    Price = order.Price,
-                    Description = createdOrder.Description,
-                    Status = createdOrder.Status,        
-                    UserId = createdOrder.UserId,
+                    Id = finalOrderState.Id,
+                    Price = finalOrderState.Price,
+                    Description = finalOrderState.Description,
+                    Status = finalOrderState.Status,        
+                    UserId = finalOrderState.UserId,
                 }
             };
         }
 
+        /*
+         * Retorna todos os pedidos associados a um id de usuário
+         */
         public Result<List<OrderViewModel>> RetrieveAllOrdersByUser(int userId)
         {
             var orders = _dbContext.Orders
@@ -72,7 +114,7 @@ namespace OrderSystem.Order.API.Services
             return new Result<List<OrderViewModel>>()
             {
                 Success = true,
-                Message = "Todos os pedidos do usuário foram retornados.",
+                Message = "Todos os pedidos do usuário foram retornados com sucesso.",
                 Data = orders
             };
         }

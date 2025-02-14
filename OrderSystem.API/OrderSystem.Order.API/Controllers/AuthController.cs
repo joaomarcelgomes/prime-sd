@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Services.Interfaces;
 using LoginRequest = OrderSystem.Order.API.Models.DTOs.Auth.LoginRequest;
@@ -18,9 +17,9 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost("login")]
-        public ActionResult<Result<string>> Login(LoginRequest login) 
+        public async Task<ActionResult<Result<string>>> Login(LoginRequest login) 
         {
-            var result = _authService.Login(login);
+            var result = await _authService.Login(login);
 
             return Ok(result);
         }

@@ -1,5 +1,6 @@
 from xmlrpc.server import SimpleXMLRPCServer
 from app.payment import process_payment
+import threading
 
 def run_server():
     server = SimpleXMLRPCServer(("0.0.0.0", 8000), allow_none=True)
@@ -7,3 +8,8 @@ def run_server():
     
     print("Servidor XML-RPC de Pagamentos rodando na porta 8000...")
     server.serve_forever()
+
+def start_server_in_background():
+    server_thread = threading.Thread(target=run_server)
+    server_thread.daemon = True
+    server_thread.start()
