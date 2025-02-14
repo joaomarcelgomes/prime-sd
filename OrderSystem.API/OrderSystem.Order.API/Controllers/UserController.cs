@@ -14,7 +14,8 @@ namespace OrderSystem.Order.API.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateUser([FromBody] UserRequest user)
         {
-            try { 
+            try
+            {
                 var result = await userService.CreateUser(user);
 
                 if (result.Success == false)
@@ -22,7 +23,7 @@ namespace OrderSystem.Order.API.Controllers
                 return BadRequest(result);
             }
             catch
-        {
+            {
                 return BadRequest(new { success = false, message = "Error ao tentar criar o usuário" });
             }
         }
@@ -41,8 +42,8 @@ namespace OrderSystem.Order.API.Controllers
                 }
 
                 var result = await userService.RetrieveUser(int.Parse(currentUserId));
-            
-                if(result.Success)
+
+                if (result.Success)
                 {
                     return Ok(result);
                 }
@@ -60,7 +61,7 @@ namespace OrderSystem.Order.API.Controllers
         public async Task<ActionResult> UpdateUser(UserRequest userUpdate)
         {
             try
-            {  
+            {
                 var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
                 if (currentUserId == null || !int.TryParse(currentUserId, out _))
@@ -74,8 +75,8 @@ namespace OrderSystem.Order.API.Controllers
                     return Ok(result);
 
                 return BadRequest(result);
-             }
-            catch(Exception)
+            }
+            catch (Exception)
             {
                 return BadRequest(new { success = false, message = "Error ao tentar atualizar o usuário" });
             }
@@ -106,5 +107,5 @@ namespace OrderSystem.Order.API.Controllers
                 return BadRequest(new { success = false, message = "Error ao tentar deletar o usuário" });
             }
         }
-
+    }
 }
