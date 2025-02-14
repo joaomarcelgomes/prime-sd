@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OrderSystem.Order.API.Infrastructure.Database;
+﻿using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Infrastructure.ExternalServices;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.Order;

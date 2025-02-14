@@ -31,7 +31,7 @@ export function useAuth() {
 
     try {
       await loginUser(email, password);
-      navigate("/dashboard");
+      navigate("/orders");
     } catch (error) {
       setErrors({ email: "", password: "E-mail ou senha incorretos" });
     } finally {

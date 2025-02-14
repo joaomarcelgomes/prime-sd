@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using OrderSystem.Order.API.Infrastructure.Database;
+﻿using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Models;
 using OrderSystem.Order.API.Models.DTOs;
 using OrderSystem.Order.API.Models.DTOs.User;
@@ -55,7 +54,8 @@ namespace OrderSystem.Order.API.Services
             {
                 Success = true,
                 Message = "Usuário cadastrado com sucesso.",
-                Data = new UserViewModel() {
+                Data = new UserViewModel 
+                {
                     Id = createdUser.Id,
                     Email = createdUser.Email,
                     Name = createdUser.Name
@@ -138,9 +138,7 @@ namespace OrderSystem.Order.API.Services
                 user.Email = userUpdate.Email;
 
             if (!string.IsNullOrEmpty(userUpdate.Password))
-            {
                 user.Password = BCrypt.Net.BCrypt.HashPassword(userUpdate.Password); 
-            }
 
             await _dbContext.SaveChangesAsync();
 

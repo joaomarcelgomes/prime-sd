@@ -23,7 +23,7 @@ namespace OrderSystem.Order.API.Controllers
             }
             catch
         {
-                return BadRequest(new { success = false, message = "Error ao tentar criar o usuário" });
+                return BadRequest(new { success = false, message = "Error ao tentar criar o usuÃ¡rio" });
             }
         }
 
@@ -51,7 +51,7 @@ namespace OrderSystem.Order.API.Controllers
             }
             catch (Exception)
             {
-                return BadRequest(new { success = false, message = "Error ao tentar carregar os dados do usuário" });
+                return BadRequest(new { success = false, message = "Error ao tentar carregar os dados do usuÃ¡rio" });
             }
         }
 
@@ -77,7 +77,7 @@ namespace OrderSystem.Order.API.Controllers
              }
             catch(Exception)
             {
-                return BadRequest(new { success = false, message = "Error ao tentar atualizar o usuário" });
+                return BadRequest(new { success = false, message = "Error ao tentar atualizar o usuÃ¡rio" });
             }
         }
 
@@ -103,9 +103,8 @@ namespace OrderSystem.Order.API.Controllers
             }
             catch (Exception)
             {
-                return BadRequest(new { success = false, message = "Error ao tentar deletar o usuário" });
+                return BadRequest(new { success = false, message = "Error ao tentar deletar o usuÃ¡rio" });
             }
         }
 
-    }
 }
