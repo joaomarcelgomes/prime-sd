@@ -6,7 +6,7 @@ using LoginRequest = OrderSystem.Order.API.Models.DTOs.Auth.LoginRequest;
 namespace OrderSystem.Order.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private IAuthService _authService;
@@ -17,11 +17,21 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<Result<string>>> Login(LoginRequest login) 
+        public async Task<ActionResult> Login(LoginRequest login)
         {
-            var result = await _authService.Login(login);
+            try
+            {
+                var result = await _authService.Login(login);
 
-            return Ok(result);
+                if (result.Success)
+                    return Ok(result);
+
+                return NoContent();
+            }
+            catch (Exception)
+            {
+                return BadRequest(new { success = false, message = "Error ao tentar fazer o login" });
+            }
         }
     }
 }

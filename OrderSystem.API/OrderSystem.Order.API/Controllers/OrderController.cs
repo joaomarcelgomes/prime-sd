@@ -22,7 +22,7 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Result<UserViewModel>>> CreateOrder([FromBody] OrderRequest order)
+        public async Task<ActionResult> CreateOrder([FromBody] OrderRequest order)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             
@@ -43,7 +43,7 @@ namespace OrderSystem.Order.API.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<Result<UserViewModel>> RetrieveAllOrdersByUser()
+        public ActionResult RetrieveAllOrdersByUser()
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 

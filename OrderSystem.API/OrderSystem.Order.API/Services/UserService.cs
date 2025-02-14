@@ -19,11 +19,11 @@ namespace OrderSystem.Order.API.Services
          * Recebe no request os dados do usuário, valida o email e a senha, criptografa a senha, 
          * armazena no banco e retorna um viewmodel pro front-end após confirmar o cadastro
          */
-        public async Task<Result<UserViewModel>> CreateUser(UserRequest user)
+        public async Task<Result> CreateUser(UserRequest user)
         {
             if (user.Password.Length < 8) 
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "A senha precisa ter pelo menos 8 caracteres.",
@@ -34,7 +34,7 @@ namespace OrderSystem.Order.API.Services
 
             if (await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == user.Email) != null)
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Já existe um usuário com o e-mail informado",
@@ -42,7 +42,7 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            User createdUser = new User() {
+            User createdUser = new User {
                 Email = user.Email,
                 Name = user.Name,
                 Password = BCrypt.Net.BCrypt.HashPassword(user.Password)
@@ -51,7 +51,7 @@ namespace OrderSystem.Order.API.Services
             _dbContext.Users.Add(createdUser);
             await _dbContext.SaveChangesAsync();
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário cadastrado com sucesso.",
@@ -66,12 +66,12 @@ namespace OrderSystem.Order.API.Services
         /*
          * Carregar usuário, retorna um erro se o usuário não for encontrado e um viewmodel de clientes se for.
          */
-        public async Task<Result<UserViewModel>> RetrieveUser(int id)
+        public async Task<Result> RetrieveUser(int id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
 
             if (user  == null) {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Usuário não encontrado.",
@@ -79,11 +79,11 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            return new Result<UserViewModel>()
+            return new Result()
             {
                 Success = true,
                 Message = "Usuário encontrado.",
-                Data = new UserViewModel()
+                Data = new UserViewModel
                 {
                     Id = user.Id,
                     Email = user.Email,
@@ -97,11 +97,11 @@ namespace OrderSystem.Order.API.Services
          * os dados na entidade que está sendo trackeada encriptando a senha, persiste as alterações e retorna mensagem de sucesso
          * com a entidade nova
          */
-        public async Task<Result<UserViewModel>> UpdateUser(UserRequest userUpdate, int userId)
+        public async Task<Result> UpdateUser(UserRequest userUpdate, int userId)
         {
             if (userUpdate.Password.Length < 8)
             {
-                return new Result<UserViewModel>()
+                return new Result()
                 {
                     Success = false,
                     Message = "A senha precisa ter pelo menos 8 caracteres.",
@@ -113,7 +113,7 @@ namespace OrderSystem.Order.API.Services
 
             if (user == null)
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Usuário não encontrado",
@@ -123,7 +123,7 @@ namespace OrderSystem.Order.API.Services
 
             if (await _dbContext.Users.FirstOrDefaultAsync(user => user.Email == userUpdate.Email) != null) 
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Já existe um usuário com o e-mail informado",
@@ -131,8 +131,11 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            user.Name = userUpdate.Name ?? user.Name;
-            user.Email = userUpdate.Email ?? user.Email;
+            if (!string.IsNullOrWhiteSpace(userUpdate.Name))
+                user.Name = userUpdate.Name;
+
+            if (!string.IsNullOrWhiteSpace(userUpdate.Email))
+                user.Email = userUpdate.Email;
 
             if (!string.IsNullOrEmpty(userUpdate.Password))
             {
@@ -141,7 +144,7 @@ namespace OrderSystem.Order.API.Services
 
             await _dbContext.SaveChangesAsync();
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário atualizado com sucesso",
@@ -157,13 +160,13 @@ namespace OrderSystem.Order.API.Services
         /*
          * Carrega os dados de um usuário do banco com base no id, se não encontrar retorna erro e se encontrar remove do banco
          */
-        public async Task<Result<UserViewModel>> DeleteUser(int id)
+        public async Task<Result> DeleteUser(int id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == id);
 
             if (user == null)
             {
-                return new Result<UserViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Usuário não encontrado",
@@ -174,7 +177,7 @@ namespace OrderSystem.Order.API.Services
             _dbContext.Remove(user);
             await _dbContext.SaveChangesAsync();
 
-            return new Result<UserViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Usuário deletado com sucesso",

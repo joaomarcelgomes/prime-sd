@@ -51,13 +51,13 @@ namespace OrderSystem.Order.API.Services
         /*
          * Valida se as credenciais do banco correspondem as enviadas na request e se sim, retorna um token jwt para autorização
          */
-        public async Task<Result<string>> Login(LoginRequest login)
+        public async Task<Result> Login(LoginRequest login)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Email == login.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
-                return new Result<string>()
+                return new Result
                 {
                     Success = false,
                     Message = "Credenciais inválidas.",
@@ -67,11 +67,15 @@ namespace OrderSystem.Order.API.Services
 
             var token = TokenGenerator(user);
 
-            return new Result<string>()
+            return new Result
             {
                 Success = true,
                 Message = "Autenticação bem-sucedida",
-                Data = token
+                Data = new
+                {
+                    Token = token,
+                    UserId = user.Id,
+                }
             };
         }
     }

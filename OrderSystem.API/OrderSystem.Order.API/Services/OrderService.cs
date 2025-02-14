@@ -21,7 +21,7 @@ namespace OrderSystem.Order.API.Services
          * Cria um pedido e chama o cliente rpc que chama o método de processar pagamento do servidor rpc, atualizando após alguns segundos
          * o status da compra no banco para "Pagamento realizado com sucesso"
          */
-        public async Task<Result<OrderViewModel>> CreateOrder(OrderRequest order, int userId)
+        public async Task<Result> CreateOrder(OrderRequest order, int userId)
         {
             Models.Order createdOrder = new Models.Order()
             {
@@ -43,7 +43,7 @@ namespace OrderSystem.Order.API.Services
                 createdOrder.Status = "Falha no processamento do pagamento";
                 await _dbContext.SaveChangesAsync();
 
-                return new Result<OrderViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Falha no processamento do pagamento",
@@ -62,7 +62,7 @@ namespace OrderSystem.Order.API.Services
 
             if (finalOrderState == null)
             {
-                return new Result<OrderViewModel>()
+                return new Result
                 {
                     Success = false,
                     Message = "Falha ao criar pedido.",
@@ -70,7 +70,7 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            return new Result<OrderViewModel>()
+            return new Result
             {
                 Success = true,
                 Message = "Pedido cadastrado com sucesso.",
@@ -88,7 +88,7 @@ namespace OrderSystem.Order.API.Services
         /*
          * Retorna todos os pedidos associados a um id de usuário
          */
-        public Result<List<OrderViewModel>> RetrieveAllOrdersByUser(int userId)
+        public Result RetrieveAllOrdersByUser(int userId)
         {
             var orders = _dbContext.Orders
                 .Where(order => order.UserId == userId)
@@ -103,7 +103,7 @@ namespace OrderSystem.Order.API.Services
 
             if (orders == null)
             {
-                return new Result<List<OrderViewModel>>()
+                return new Result
                 {
                     Success = true,
                     Message = "Nenhum pedido encontrado.",
@@ -111,7 +111,7 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            return new Result<List<OrderViewModel>>()
+            return new Result
             {
                 Success = true,
                 Message = "Todos os pedidos do usuário foram retornados com sucesso.",

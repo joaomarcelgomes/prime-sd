@@ -8,7 +8,7 @@ using OrderSystem.Order.API.Services.Interfaces;
 namespace OrderSystem.Order.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/user")]
     public class UserController : ControllerBase
     {
         private IUserService _userService { get; set; }
@@ -19,79 +19,99 @@ namespace OrderSystem.Order.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Result<UserViewModel>>> CreateUser([FromBody] UserRequest user)
+        public async Task<ActionResult> CreateUser([FromBody] UserRequest user)
         {
-            var result = await _userService.CreateUser(user);
+            try { 
+                var result = await _userService.CreateUser(user);
 
-            if (result.Success == false)
-            {
+                if (result.Success == false)
+                    return Ok(result);
                 return BadRequest(result);
             }
-
-            return Ok(result);
+            catch
+        {
+                return BadRequest(new { success = false, message = "Error ao tentar criar o usuário" });
+            }
         }
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<Result<UserViewModel>>> RetrieveUser()
+        public async Task<ActionResult> RetrieveUser()
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId == null || !int.TryParse(currentUserId, out _))
+            try
             {
-                return BadRequest();
-            }
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var result = await _userService.RetrieveUser(int.Parse(currentUserId));
+                if (currentUserId == null || !int.TryParse(currentUserId, out _))
+                {
+                    return BadRequest();
+                }
+
+                var result = await _userService.RetrieveUser(int.Parse(currentUserId));
             
-            if(result.Success == false)
-            {
+                if(result.Success)
+                {
+                    return Ok(result);
+                }
+
                 return NotFound(result);
             }
-
-            return Ok(result);
+            catch (Exception)
+            {
+                return BadRequest(new { success = false, message = "Error ao tentar carregar os dados do usuário" });
+            }
         }
 
         [HttpPut]
         [Authorize]
-        public async Task<ActionResult<Result<UserViewModel>>> UpdateUser(UserRequest userUpdate)
+        public async Task<ActionResult> UpdateUser(UserRequest userUpdate)
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            try
+            {  
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            if (currentUserId == null || !int.TryParse(currentUserId, out _))
-            {
-                return BadRequest();
-            }
+                if (currentUserId == null || !int.TryParse(currentUserId, out _))
+                {
+                    return BadRequest();
+                }
 
-            var result = await _userService.UpdateUser(userUpdate, int.Parse(currentUserId));
+                var result = await _userService.UpdateUser(userUpdate, int.Parse(currentUserId));
 
-            if (result.Success == false)
-            {
+                if (result.Success)
+                    return Ok(result);
+
                 return BadRequest(result);
+             }
+            catch(Exception)
+            {
+                return BadRequest(new { success = false, message = "Error ao tentar atualizar o usuário" });
             }
-
-            return Ok(result);
         }
 
         [HttpDelete]
         [Authorize]
-        public async Task<ActionResult<Result<UserViewModel>>> DeleteUser()
+        public async Task<ActionResult> DeleteUser()
         {
-            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (currentUserId == null || !int.TryParse(currentUserId, out _))
+            try
             {
-                return BadRequest();
-            }
+                var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            var result = await _userService.DeleteUser(int.Parse(currentUserId));
+                if (currentUserId == null || !int.TryParse(currentUserId, out _))
+                {
+                    return BadRequest();
+                }
 
-            if (result.Success == false)
-            {
+                var result = await _userService.DeleteUser(int.Parse(currentUserId));
+
+                if (result.Success)
+                    return Ok(result);
+
                 return NotFound(result);
             }
-
-            return Ok(result);
+            catch (Exception)
+            {
+                return BadRequest(new { success = false, message = "Error ao tentar deletar o usuário" });
+            }
         }
 
     }

@@ -6,7 +6,7 @@ namespace OrderSystem.Order.API.Services.Interfaces
 {
     public interface IOrderService
     {
-        Task<Result<OrderViewModel>> CreateOrder(OrderRequest order, int userId);
-        Result<List<OrderViewModel>> RetrieveAllOrdersByUser(int userId);
+        Task<Result> CreateOrder(OrderRequest order, int userId);
+        Result RetrieveAllOrdersByUser(int userId);
     }
 }
