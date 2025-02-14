@@ -71,7 +71,6 @@ namespace OrderSystem.Order.API.Services
                 Message = "Usuário cadastrado com sucesso.",
                 Data = new UserViewModel 
                 {
-                    Id = createdUser.Id,
                     Email = createdUser.Email,
                     Name = createdUser.Name
                 }

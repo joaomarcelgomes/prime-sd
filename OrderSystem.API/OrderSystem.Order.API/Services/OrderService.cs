@@ -58,29 +58,17 @@ namespace OrderSystem.Order.API.Services
                 };
             }
 
-            var finalOrderState = await _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == createdOrder.Id);
-
-            if (finalOrderState == null)
-            {
-                return new Result
-                {
-                    Success = false,
-                    Message = "Falha ao criar pedido.",
-                    Data = new OrderViewModel() { }
-                };
-            }
-
             return new Result
             {
                 Success = true,
                 Message = "Pedido cadastrado com sucesso.",
                 Data = new OrderViewModel()
                 {
-                    Id = finalOrderState.Id,
-                    Price = finalOrderState.Price,
-                    Description = finalOrderState.Description,
-                    Status = finalOrderState.Status,        
-                    UserId = finalOrderState.UserId,
+                    Id = createdOrder.Id,
+                    Price = createdOrder.Price,
+                    Description = createdOrder.Description,
+                    Status = createdOrder.Status,        
+                    UserId = createdOrder.UserId,
                 }
             };
         }

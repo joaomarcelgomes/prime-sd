@@ -18,8 +18,9 @@ namespace OrderSystem.Order.API.Controllers
             {
                 var result = await userService.CreateUser(user);
 
-                if (result.Success == false)
+                if (result.Success)
                     return Ok(result);
+
                 return BadRequest(result);
             }
             catch
