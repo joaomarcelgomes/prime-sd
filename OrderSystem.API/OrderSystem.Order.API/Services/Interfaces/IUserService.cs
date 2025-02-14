@@ -6,9 +6,9 @@ namespace OrderSystem.Order.API.Services.Interfaces
 {
     public interface IUserService
     {
-        Result CreateUser(UserRequest user);
-        Result RetrieveUser(int id);
-        Result UpdateUser(UserRequest userUpdate, int id);
-        Result DeleteUser(int id);
+        Task<Result> CreateUser(UserRequest user);
+        Task<Result> RetrieveUser(int id);
+        Task<Result> UpdateUser(UserRequest userUpdate, int id);
+        Task<Result> DeleteUser(int id);
     }
 }

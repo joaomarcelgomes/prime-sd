@@ -13,7 +13,8 @@ namespace OrderSystem.Order.API.Infrastructure.ExternalServices
             _url = url;
         }
 
-        public string Call(string method, params object[] parameters)
+        // Chamada no padrão XML/HTTP para o server RPC que executa o método para atualizar status de pagamento
+        public async Task Call(string method, params object[] parameters)
         {
             var xmlRequest = new XmlDocument();
             xmlRequest.LoadXml($"<?xml version='1.0'?>" +
@@ -21,25 +22,10 @@ namespace OrderSystem.Order.API.Infrastructure.ExternalServices
                 $"{string.Join("", Array.ConvertAll(parameters, p => $"<param><value><string>{p}</string></value></param>"))}" +
                 $"</params></methodCall>");
 
-            var request = (HttpWebRequest)WebRequest.Create(_url);
-            request.Method = "POST";
-            request.ContentType = "text/xml";
+            using var httpClient = new HttpClient();
+            var content = new StringContent(xmlRequest.OuterXml, Encoding.UTF8, "text/xml");
 
-            byte[] bytes = Encoding.UTF8.GetBytes(xmlRequest.OuterXml);
-            request.ContentLength = bytes.Length;
-
-            using (Stream requestStream = request.GetRequestStream())
-            {
-                requestStream.Write(bytes, 0, bytes.Length);
-            }
-
-            using (var response = (HttpWebResponse)request.GetResponse())
-            using (var responseStream = new StreamReader(response.GetResponseStream()))
-            {
-                var xmlResponse = new XmlDocument();
-                xmlResponse.LoadXml(responseStream.ReadToEnd());
-                return xmlResponse.SelectSingleNode("//string")?.InnerText ?? "Erro na resposta RPC";
-            }
+            await httpClient.PostAsync(_url, content).ConfigureAwait(false);
         }
     }
 }

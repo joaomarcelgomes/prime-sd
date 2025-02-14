@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Models;
@@ -20,6 +21,9 @@ namespace OrderSystem.Order.API.Services
             _configuration = configuration;
         }
 
+        /*
+         * Geração de token JWT e setup das claims baseado nos dados do usuário
+         */
         private string TokenGenerator(User user)
         {
             string secretKey = _configuration["JwtSettings:SecretKey"];
@@ -44,9 +48,12 @@ namespace OrderSystem.Order.API.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public Result Login(LoginRequest login)
+        /*
+         * Valida se as credenciais do banco correspondem as enviadas na request e se sim, retorna um token jwt para autorização
+         */
+        public async Task<Result> Login(LoginRequest login)
         {
-            var user = _dbContext.Users.FirstOrDefault(user => user.Email == login.Email);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Email == login.Email);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(login.Password, user.Password))
             {
@@ -64,9 +71,10 @@ namespace OrderSystem.Order.API.Services
             {
                 Success = true,
                 Message = "Autenticação bem-sucedida",
-                Data = new {
+                Data = new
+                {
                     Token = token,
-                    UserId = user.Id
+                    UserId = user.Id,
                 }
             };
         }
