@@ -12,14 +12,8 @@ namespace OrderSystem.Order.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrderController : ControllerBase
+    public class OrderController(IOrderService orderService) : ControllerBase
     {
-        private IOrderService _orderService;
-
-        public OrderController(IOrderService orderService)
-        {
-            _orderService = orderService;
-        }
 
         [HttpPost]
         public async Task<ActionResult> CreateOrder([FromBody] OrderRequest order)
@@ -31,7 +25,7 @@ namespace OrderSystem.Order.API.Controllers
                 return BadRequest();
             }
 
-            var result = await _orderService.CreateOrder(order, int.Parse(currentUserId));
+            var result = await orderService.CreateOrder(order, int.Parse(currentUserId));
 
             if (result.Success == false)
             {
@@ -52,7 +46,7 @@ namespace OrderSystem.Order.API.Controllers
                 return BadRequest();
             }
 
-            var result = _orderService.RetrieveAllOrdersByUser(int.Parse(currentUserId));
+            var result = orderService.RetrieveAllOrdersByUser(int.Parse(currentUserId));
 
             if (result.Success == false)
             {

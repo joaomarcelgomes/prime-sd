@@ -7,21 +7,14 @@ namespace OrderSystem.Order.API.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AuthController : ControllerBase
+    public class AuthController(IAuthService authService) : ControllerBase
     {
-        private IAuthService _authService;
-
-        public AuthController(IAuthService authService)
-        {
-            _authService = authService;
-        }
-
         [HttpPost("login")]
         public async Task<ActionResult> Login(LoginRequest login)
         {
             try
             {
-                var result = await _authService.Login(login);
+                var result = await authService.Login(login);
 
                 if (result.Success)
                     return Ok(result);

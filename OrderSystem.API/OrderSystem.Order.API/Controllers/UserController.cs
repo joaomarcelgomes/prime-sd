@@ -9,20 +9,13 @@ namespace OrderSystem.Order.API.Controllers
 {
     [ApiController]
     [Route("api/user")]
-    public class UserController : ControllerBase
+    public class UserController(IUserService userService) : ControllerBase
     {
-        private IUserService _userService { get; set; }
-
-        public UserController(IUserService userService) 
-        { 
-            _userService = userService;
-        }
-
         [HttpPost]
         public async Task<ActionResult> CreateUser([FromBody] UserRequest user)
         {
             try { 
-                var result = await _userService.CreateUser(user);
+                var result = await userService.CreateUser(user);
 
                 if (result.Success == false)
                     return Ok(result);
@@ -47,7 +40,7 @@ namespace OrderSystem.Order.API.Controllers
                     return BadRequest();
                 }
 
-                var result = await _userService.RetrieveUser(int.Parse(currentUserId));
+                var result = await userService.RetrieveUser(int.Parse(currentUserId));
             
                 if(result.Success)
                 {
@@ -75,7 +68,7 @@ namespace OrderSystem.Order.API.Controllers
                     return BadRequest();
                 }
 
-                var result = await _userService.UpdateUser(userUpdate, int.Parse(currentUserId));
+                var result = await userService.UpdateUser(userUpdate, int.Parse(currentUserId));
 
                 if (result.Success)
                     return Ok(result);
@@ -101,7 +94,7 @@ namespace OrderSystem.Order.API.Controllers
                     return BadRequest();
                 }
 
-                var result = await _userService.DeleteUser(int.Parse(currentUserId));
+                var result = await userService.DeleteUser(int.Parse(currentUserId));
 
                 if (result.Success)
                     return Ok(result);
