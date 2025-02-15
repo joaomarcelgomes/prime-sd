@@ -34,7 +34,7 @@ function RegisterPage() {
         onClick={handleSubmit}
         disabled={isLoading}
         className={`w-full py-2 px-4 rounded-lg transition ${
-          isLoading ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-[#29638A] text-white hover:bg-gray-600"
+          isLoading ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-black text-white hover:bg-gray-600"
         }`}
       >
         {isLoading ? "Criando conta..." : "Criar Conta"}

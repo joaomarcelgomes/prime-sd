@@ -61,7 +61,7 @@ const OrdersPage = () => {
     return (
         <MenuLayout nav="Orders">
             <div className="flex-1 flex items-center flex-col">
-                <h2 className="text-xl font-semibold my-8 text-[#29638A]">Pedidos em Andamento</h2>
+                <h2 className="text-xl font-semibold my-8 text-black">Pedidos em Andamento</h2>
 
                 {isLoading ? (
                     <p>Carregando pedidos...</p>
@@ -89,7 +89,7 @@ const OrdersPage = () => {
                                         <td className="p-2 truncate max-w-xs">{order.description}</td>
                                         <td className="p-2 truncate max-w-xs">{order.status}</td>
                                         <td className="p-2">
-                                            <button className="text-[#29638A] hover:underline cursor-pointer"
+                                            <button className="text-black hover:underline cursor-pointer"
                                                 onClick={() => {
                                                     setSelectedOrder(order);
                                                     setIsModalDetailOpen(true);
@@ -104,7 +104,7 @@ const OrdersPage = () => {
                         </table>
                     </div>
                 )}
-                <button className="fixed bottom-6 right-6 bg-[#29638A] text-white p-4 rounded-md shadow-lg hover:bg-gray-700"
+                <button className="fixed bottom-6 right-6 bg-black text-white p-4 rounded-md shadow-lg hover:bg-gray-700"
                     onClick={() => setIsModalCreateOrderOpen(true)}>
                     Criar Pedido
                 </button>
@@ -164,12 +164,12 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
                 <button
-                    className="absolute top-3 right-4 text-lg font-bold text-[#29638A]"
+                    className="absolute top-3 right-4 text-lg font-bold text-black"
                     onClick={onClose}
                 >
                     ×
                 </button>
-                <h2 className="text-xl font-semibold text-center mb-4 text-[#29638A]">Criar Pedido</h2>
+                <h2 className="text-xl font-semibold text-center mb-4 text-black">Criar Pedido</h2>
 
                 <form className="space-y-3">
                     <FieldComponent
@@ -188,7 +188,7 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
                     />
                     <button
                         type="submit"
-                        className="mt-4 w-full bg-[#29638A] text-white py-2 rounded-lg hover:bg-gray-700"
+                        className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-700"
                         disabled={isLoading}
                         onClick={handleSubmit}
                     >
@@ -207,12 +207,12 @@ const DetailComponent: React.FC<ModalDetailProps> = ({ isOpen, onClose, order })
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
                 <button
-                    className="absolute top-3 right-4 text-lg font-bold text-[#29638A]"
+                    className="absolute top-3 right-4 text-lg font-bold text-black"
                     onClick={onClose}
                 >
                     ×
                 </button>
-                <h2 className="text-lg font-semibold text-left mb-4 text-[#29638A]">Detalhes do Pedido</h2>
+                <h2 className="text-lg font-semibold text-left mb-4 text-black">Detalhes do Pedido</h2>
                 <p className="text-sm ">Pedido ID</p>
                 <p className="font-medium">{order!.id}</p>
                 <p className="text-sm mt-2">Pedido Valor</p>

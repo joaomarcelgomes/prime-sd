@@ -55,8 +55,8 @@ const  ProfilePage = () => {
   return (
     <MenuLayout nav="Profile">
       <div className="flex-1 flex items-center flex-col">
-        <h2 className="text-xl font-semibold my-16 text-[#29638A]">Perfil</h2>
-        <div className="bg-white rounded-xl p-6 w-96 text-center border border-[#29638A]">
+        <h2 className="text-xl font-semibold my-16 text-black">Perfil</h2>
+        <div className="bg-white rounded-xl p-6 w-96 text-center border border-black">
 
           <div className="text-gray-700 space-y-1">
             <p className="text-sm">Nome</p>
@@ -66,7 +66,7 @@ const  ProfilePage = () => {
             <p className="font-medium text-black">{user.email}</p>
           </div>
 
-          <button className="mt-6 cursor-pointer w-full bg-[#29638A] text-white py-2 rounded-lg hover:bg-neutral-700" onClick={() => setIsModalOpen(true)}>
+          <button className="mt-6 cursor-pointer w-full bg-black text-white py-2 rounded-lg hover:bg-neutral-700" onClick={() => setIsModalOpen(true)}>
             Editar Perfil
           </button>
           <button className="mt-4 cursor-pointer text-red-500 text-sm hover:underline" onClick={handleDeleteClick}>
@@ -87,12 +87,12 @@ const  ProfilePage = () => {
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg w-96 relative shadow-lg">
             <button
-              className="absolute top-3 right-4 text-lg font-bold text-[#29638A]"
+              className="absolute top-3 right-4 text-lg font-bold text-black"
               onClick={() => setIsModalOpen(false)}
             >
               ×
             </button>
-            <h2 className="text-xl font-semibold text-center mb-4 text-[#29638A]">Editar Perfil</h2>
+            <h2 className="text-xl font-semibold text-center mb-4 text-black">Editar Perfil</h2>
 
             <form className="space-y-3">
               <FieldComponent label="Nome" name="name" value={formData.name} onChange={handleChange} error={errors.name} />
@@ -107,7 +107,7 @@ const  ProfilePage = () => {
               />
               <button
                 type="submit"
-                className="mt-4 w-full bg-[#29638A] text-white py-2 rounded-lg hover:bg-gray-600"
+                className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-600"
                 onClick={handleSubmit}
               >
                 Salvar Alterações
