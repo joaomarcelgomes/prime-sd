@@ -1,81 +1,7 @@
+
 services:
-  # 🔹 Banco de Dados PostgreSQL
-  postgres:
-    image: postgres:15
-    container_name: postgres_db
-    restart: always
-    environment:
-      POSTGRES_USER: prime
-      POSTGRES_PASSWORD: prime
-      POSTGRES_DB: order_system
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U prime -d order_system"]
-      interval: 10s
-      retries: 5
-    networks:
-      - order_network
-
-  # 🔹 Backend Express (Notificações)
-  notification_api:
-    build:
-      context: ./OrderSystem.API/OrderSystem.Notification.API
-      dockerfile: Dockerfile
-    container_name: notification_api
-    restart: always
-    ports:
-      - "3000:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: "postgresql://myuser:mypassword@postgres_db:5432/mydatabase"
-    networks:
-      - order_network
-
-  # 🔹 Backend C# (Pedidos) + Migrations
-  order_api:
-    build:
-      context: ./OrderSystem.API/OrderSystem.Order.API
-      dockerfile: Dockerfile
-    container_name: order_api
-    restart: always
-    ports:
-      - "5146:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=order_system;Username=prime;Password=prime"
-    networks:
-      - order_network
-
-  # 🔹 Backend Python (Pagamentos)
-  payment_api:
-    build:
-      context: ./OrderSystem.API/OrderSystem.Payment.API
-      dockerfile: Dockerfile
-    container_name: payment_api
-    restart: always
-    ports:
-      - "8000:8000"
-    depends_on:
-      postgres:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: "Host=postgres;Port=5432;Database=order_system;Username=prime;Password=prime"
-    networks:
-      - order_network
-
-  # 🔹 Frontend React
   web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
+    image: joaomarcelogomes7/prime-web:latest
     container_name: web_frontend
     restart: always
     ports:
@@ -89,10 +15,65 @@ services:
     networks:
       - order_network
 
+  payment_api:
+    image: joaomarcelogomes7/prime-payment_api
+    container_name: payment_api
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8000:8000"
+    networks:
+      - order_network
 
-volumes:
-  postgres_data:
+  notification_api:
+    image: joaomarcelogomes7/prime-notification_api:latest
+    container_name: notification_api
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - order_network
+
+  order_api:
+    image: joaomarcelogomes7/prime-order_api:latest
+    container_name: order_api
+    restart: always
+    ports:
+      - "5146:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - order_network
+
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: prime
+      POSTGRES_PASSWORD: prime
+      POSTGRES_DB: order_system
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U prime -d order_system"]
+      interval: 10s
+      retries: 5
+    networks:
+      - order_network
 
 networks:
   order_network:
     driver: bridge
+
+volumes:
+  postgres_data:
