@@ -17,6 +17,8 @@ services:
       test: ["CMD-SHELL", "pg_isready -U prime -d order_system"]
       interval: 10s
       retries: 5
+    networks:
+      - order_network
 
   # 🔹 Backend Express (Notificações)
   notification_api:
@@ -41,12 +43,14 @@ services:
     container_name: order_api
     restart: always
     ports:
-      - "5001:8080"
+      - "5146:8080"
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      ConnectionStrings__DefaultConnection: "Host=postgres_db;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword"
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=order_system;Username=prime;Password=prime"
+    networks:
+      - order_network
 
   # 🔹 Backend Python (Pagamentos)
   payment_api:
@@ -61,7 +65,9 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: "postgresql://myuser:mypassword@postgres_db:5432/mydatabase"
+      DATABASE_URL: "Host=postgres;Port=5432;Database=order_system;Username=prime;Password=prime"
+    networks:
+      - order_network
 
   # 🔹 Frontend React
   web:
@@ -81,3 +87,7 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  order_network:
+    driver: bridge

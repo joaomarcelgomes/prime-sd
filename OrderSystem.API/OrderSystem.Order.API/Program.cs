@@ -1,3 +1,4 @@
+using System.IO.Pipelines;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -50,8 +51,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<OrderSystemDbContext>(options =>
-    options.UseNpgsql(connectionString));
-
+options.UseNpgsql("Host=postgres;Port=5432;Database=order_system;Username=prime;Password=prime"));
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
