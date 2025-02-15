@@ -14,7 +14,7 @@ namespace OrderSystem.Order.API.Services
         public OrderService(OrderSystemDbContext dbContext)
         {
             _dbContext = dbContext;
-            _rpcClient = new RpcClient("http://localhost:8000/");
+            _rpcClient = new RpcClient("http://payment_api:8000/");
         }
 
         /*

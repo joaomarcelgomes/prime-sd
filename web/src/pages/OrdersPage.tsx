@@ -30,7 +30,7 @@ const OrdersPage = () => {
     const { orders, isLoading, error, setOrders } = useOrders();
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-    useWebSocket("ws://localhost:8080", (data) => {
+    useWebSocket("ws://notification_api:3000", (data) => {
         if (data.type === "NEW_ORDER") {
             setOrders((prevOrders) => {
                 const orderIndex = prevOrders.findIndex((order) => order.id === data.orderId);

@@ -34,6 +34,8 @@ services:
         condition: service_healthy
     environment:
       DATABASE_URL: "postgresql://myuser:mypassword@postgres_db:5432/mydatabase"
+    networks:
+      - order_network
 
   # 🔹 Backend C# (Pedidos) + Migrations
   order_api:

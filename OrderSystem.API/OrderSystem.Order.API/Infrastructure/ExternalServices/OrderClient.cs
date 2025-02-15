@@ -13,7 +13,7 @@ public class OrderClient
         };
 
         // Cria o canal de comunicação com o servidor gRPC (ajuste a URL e porta conforme necessário)
-        using var channel = GrpcChannel.ForAddress("http://localhost:50051", new GrpcChannelOptions { HttpHandler = handler });
+        using var channel = GrpcChannel.ForAddress("http://notification_api:50051", new GrpcChannelOptions { HttpHandler = handler });
         var client = new OrdergRPCService.OrdergRPCServiceClient(channel);
 
         // Cria a mensagem com os dados do pedido
