@@ -5,7 +5,6 @@ using Microsoft.IdentityModel.Tokens;
 using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Services;
 using OrderSystem.Order.API.Services.Interfaces;
-using Grpc.Net.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,8 +46,11 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+// Pegando string de conexão
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<OrderSystemDbContext>(options =>
-    options.UseSqlite("Data Source=order-system.db"));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -81,11 +83,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
