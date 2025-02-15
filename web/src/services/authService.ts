@@ -17,7 +17,6 @@ export async function loginUser(email: string, password: string) {
     console.log(result);
 
     localStorage.setItem("token", result.data.token);
-    localStorage.setItem("user-id", result.data.userId);
     return result;
   } catch (error) {
     console.error("Erro no login:", error);

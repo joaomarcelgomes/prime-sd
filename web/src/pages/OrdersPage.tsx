@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { MenuLayout } from "../layouts/MenuLayout";
 import { useOrders } from "../hooks/useOrders";
+import { create } from "../hooks/createOrder";
+import { FieldComponent } from "../components/FieldComponents";
 
 type Order = {
     id: string;
@@ -72,7 +74,7 @@ const OrdersPage = () => {
                             </tbody>
                         </table>
                         <button className="fixed bottom-6 right-6 bg-gray-600 text-white p-4 rounded-md shadow-lg hover:bg-gray-700"
-                        onClick={() => setIsModalCreateOrderOpen(true)}>
+                            onClick={() => setIsModalCreateOrderOpen(true)}>
                             Criar Pedido
                         </button>
                     </div>
@@ -80,7 +82,7 @@ const OrdersPage = () => {
             </div>
 
             {isModalDetailOpen && (
-                <DetailComponent 
+                <DetailComponent
                     isOpen={isModalDetailOpen}
                     onClose={() => setIsModalDetailOpen(false)}
                     order={selectedOrder}
@@ -100,66 +102,72 @@ const OrdersPage = () => {
 
 const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) => {
 
-    const [value, setValue] = useState<string>("");
-    const [description, setDescription] = useState<string>("");
+    const [formData, setFormData] = useState({ value: "", description: "" });
+
+    const { handleCreate, isLoading, errors, success } = create();
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [event.target.name]: event.target.value });
+    };
 
     const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
 
         if (/^\d*([.,]?\d{0,2})?$/.test(inputValue)) {
-        setValue(inputValue.replace(",", "."));
+            setFormData({ ...formData, value: inputValue });
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log({ value, description });
-        onClose();
+        await handleCreate(formData.value, formData.description);
     };
+
+    useEffect(() => {
+        if (success) {
+            onClose();
+            window.location.reload();
+        }
+    }, [success]);
 
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
-            <button
-              className="absolute top-3 right-4 text-lg font-bold"
-              onClick={onClose}
-            >
-              ×
-            </button>
-            <h2 className="text-xl font-semibold text-center mb-4">Criar Pedido</h2>
+            <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
+                <button
+                    className="absolute top-3 right-4 text-lg font-bold"
+                    onClick={onClose}
+                >
+                    ×
+                </button>
+                <h2 className="text-xl font-semibold text-center mb-4">Criar Pedido</h2>
 
-            <form className="space-y-3">
-              <div>
-                <label className="block text-sm font-medium">Valor</label>
-                <input
-                    type="text"
-                    className="w-full p-2 border rounded-md bg-white"
-                    value={value}
-                    onChange={handleValueChange}
-                    placeholder="Digite o valor (ex: 199.99)"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium">Descrição</label>
-                <textarea
-                    className="w-full p-2 border rounded-md bg-white resize-none"
-                    rows={4}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Descreva o pedido..."
-                />
-              </div>
-              <button
-                type="submit"
-                className="mt-4 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700"
-                onClick={handleSubmit}
-              >
-                Criar Pedido
-              </button>
-            </form>
-          </div>
+                <form className="space-y-3">
+                    <FieldComponent
+                        label="Valor"
+                        name="value"
+                        value={formData.value}
+                        onChange={handleValueChange}
+                        error={errors.value}
+                    />
+                    <FieldComponent
+                        label="Descrição"
+                        name="description"
+                        value={formData.description}
+                        onChange={handleChange}
+                        error={errors.description}
+                    />
+                    <button
+                        type="submit"
+                        className="mt-4 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700"
+                        disabled={isLoading}
+                        onClick={handleSubmit}
+                    >
+                        Criar Pedido
+                    </button>
+                </form>
+            </div>
         </div>
     );
 }

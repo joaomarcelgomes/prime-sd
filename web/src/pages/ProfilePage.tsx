@@ -32,15 +32,12 @@ const  ProfilePage = () => {
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setFormData({ ...formData, [event.target.name]: event.target.value });
-    };
-  
-    const handleSubmit = (event: React.FormEvent) => {
-      event.preventDefault();
-      handleUpdate(formData.name, formData.email, formData.password, formData.confirmPassword);
+  };
 
-      if(success)
-        window.location.reload();
-    };
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    await handleUpdate(formData.name, formData.email, formData.password, formData.confirmPassword);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -49,7 +46,10 @@ const  ProfilePage = () => {
     };
 
     fetchUser();
-  }, []);
+
+    if(success)
+      window.location.reload();
+  }, [success]);
 
   return (
     <MenuLayout nav="Profile">

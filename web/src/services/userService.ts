@@ -2,11 +2,9 @@ import config from "../config.ts";
 
 export async function getUser() {
   try {
-
-    const id = localStorage.getItem("user-id");
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${config.apiUrl}/user?id=${id}`, {
+    const response = await fetch(`${config.apiUrl}/user`, {
       headers: { "Authorization": `Bearer ${token}` },
       method: "GET",
     });
@@ -25,10 +23,9 @@ export async function getUser() {
 
 export async function updateUser(name: string, email: string, password: string) {
   try {
-    const id = localStorage.getItem("user-id");
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${config.apiUrl}/user/${id}`, {
+    const response = await fetch(`${config.apiUrl}/user`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -51,10 +48,9 @@ export async function updateUser(name: string, email: string, password: string) 
 
 export async function deleteUser() {
   try {
-    const id = localStorage.getItem("user-id");
     const token = localStorage.getItem("token");
 
-    const response = await fetch(`${config.apiUrl}/user/${id}`, {
+    const response = await fetch(`${config.apiUrl}/user`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
