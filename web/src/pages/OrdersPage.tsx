@@ -155,6 +155,7 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
     useEffect(() => {
         if (success) {
             onClose();
+            window.location.reload();
         }
     }, [success]);
 

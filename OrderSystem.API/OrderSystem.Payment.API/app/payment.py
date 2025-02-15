@@ -1,6 +1,5 @@
 import time
-from app.database import SessionLocal
-from app.models import Order
+from app.database import SessionLocal, Order
 import threading
 
 def process_payment_in_thread(order_id):

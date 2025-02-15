@@ -8,8 +8,3 @@ def run_server():
     
     print("Servidor XML-RPC de Pagamentos rodando na porta 8000...")
     server.serve_forever()
-
-def start_server_in_background():
-    server_thread = threading.Thread(target=run_server)
-    server_thread.daemon = True
-    server_thread.start()

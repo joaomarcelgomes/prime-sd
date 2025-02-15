@@ -75,7 +75,7 @@ function main() {
   });
 
   // Iniciar o servidor HTTP (WebSocket) na porta 8080
-  httpServer.listen(3000, () => {
+  httpServer.listen(3000, "0.0.0.0", () => {
     console.log("Servidor WebSocket rodando na porta 8080");
   });
 }
