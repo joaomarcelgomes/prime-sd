@@ -4,6 +4,7 @@ import { MenuLayout } from "../layouts/MenuLayout";
 import { useOrders } from "../hooks/useOrders";
 import { create } from "../hooks/createOrder";
 import { FieldComponent } from "../components/FieldComponents";
+import { useWebSocket } from "../hooks/useWebSocket";
 
 type Order = {
     id: string;
@@ -26,13 +27,40 @@ type ModalDetailProps = {
 const OrdersPage = () => {
     const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
     const [isModalCreateOrderOpen, setIsModalCreateOrderOpen] = useState(false);
-    const { orders, isLoading, error } = useOrders();
+    const { orders, isLoading, error, setOrders } = useOrders();
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+
+    useWebSocket("ws://localhost:8080", (data) => {
+        if (data.type === "NEW_ORDER") {
+            setOrders((prevOrders) => {
+                const orderIndex = prevOrders.findIndex((order) => order.id === data.orderId);
+                
+                if (orderIndex !== -1) {
+                    const updatedOrders = [...prevOrders];
+                    updatedOrders[orderIndex] = {
+                        ...updatedOrders[orderIndex],
+                        value: data.value,
+                        description: data.description,
+                        status: data.status,
+                    };
+                    return updatedOrders;
+                } else {
+                    // Se for um novo pedido, adiciona na lista
+                    return [...prevOrders, {
+                        id: data.orderId,
+                        value: data.value,
+                        description: data.description,
+                        status: data.status,
+                    }];
+                }
+            });
+        }
+    });
 
     return (
         <MenuLayout nav="Orders">
             <div className="flex-1 flex items-center flex-col">
-                <h2 className="text-xl font-semibold my-8">Pedidos em Andamento</h2>
+                <h2 className="text-xl font-semibold my-8 text-[#29638A]">Pedidos em Andamento</h2>
 
                 {isLoading ? (
                     <p>Carregando pedidos...</p>
@@ -60,7 +88,7 @@ const OrdersPage = () => {
                                         <td className="p-2 truncate max-w-xs">{order.description}</td>
                                         <td className="p-2 truncate max-w-xs">{order.status}</td>
                                         <td className="p-2">
-                                            <button className="text-blue-600 hover:underline cursor-pointer"
+                                            <button className="text-[#29638A] hover:underline cursor-pointer"
                                                 onClick={() => {
                                                     setSelectedOrder(order);
                                                     setIsModalDetailOpen(true);
@@ -73,12 +101,12 @@ const OrdersPage = () => {
                                 ))}
                             </tbody>
                         </table>
-                        <button className="fixed bottom-6 right-6 bg-gray-600 text-white p-4 rounded-md shadow-lg hover:bg-gray-700"
-                            onClick={() => setIsModalCreateOrderOpen(true)}>
-                            Criar Pedido
-                        </button>
                     </div>
                 )}
+                <button className="fixed bottom-6 right-6 bg-[#29638A] text-white p-4 rounded-md shadow-lg hover:bg-gray-700"
+                    onClick={() => setIsModalCreateOrderOpen(true)}>
+                    Criar Pedido
+                </button>
             </div>
 
             {isModalDetailOpen && (
@@ -126,7 +154,6 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
     useEffect(() => {
         if (success) {
             onClose();
-            window.location.reload();
         }
     }, [success]);
 
@@ -136,12 +163,12 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
                 <button
-                    className="absolute top-3 right-4 text-lg font-bold"
+                    className="absolute top-3 right-4 text-lg font-bold text-[#29638A]"
                     onClick={onClose}
                 >
                     ×
                 </button>
-                <h2 className="text-xl font-semibold text-center mb-4">Criar Pedido</h2>
+                <h2 className="text-xl font-semibold text-center mb-4 text-[#29638A]">Criar Pedido</h2>
 
                 <form className="space-y-3">
                     <FieldComponent
@@ -160,7 +187,7 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
                     />
                     <button
                         type="submit"
-                        className="mt-4 w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700"
+                        className="mt-4 w-full bg-[#29638A] text-white py-2 rounded-lg hover:bg-gray-700"
                         disabled={isLoading}
                         onClick={handleSubmit}
                     >
@@ -171,7 +198,7 @@ const CreateOrderComponent: React.FC<ModalCreateProps> = ({ isOpen, onClose }) =
         </div>
     );
 }
-
+ 
 const DetailComponent: React.FC<ModalDetailProps> = ({ isOpen, onClose, order }) => {
     if (!isOpen || !order) return null;
 
@@ -179,20 +206,20 @@ const DetailComponent: React.FC<ModalDetailProps> = ({ isOpen, onClose, order })
         <div className="fixed inset-0 bg-gray-500/1 transition-opacity bg-opacity-30 backdrop-blur-sm flex items-center justify-center">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96 relative">
                 <button
-                    className="absolute top-3 right-4 text-lg font-bold"
+                    className="absolute top-3 right-4 text-lg font-bold text-[#29638A]"
                     onClick={onClose}
                 >
                     ×
                 </button>
-                <h2 className="text-lg font-semibold text-center mb-4">Detalhes do Pedido</h2>
-                <p className="text-sm font-medium">Pedido ID</p>
-                <p>{order!.id}</p>
-                <p className="text-sm font-medium mt-2">Pedido Valor</p>
-                <p>{order!.value}</p>
-                <p className="text-sm font-medium mt-2">Descrição</p>
-                <p>{order!.description}</p>
-                <p className="text-sm font-medium mt-2">Status do Pedido</p>
-                <p>{order!.status}</p>
+                <h2 className="text-lg font-semibold text-left mb-4 text-[#29638A]">Detalhes do Pedido</h2>
+                <p className="text-sm ">Pedido ID</p>
+                <p className="font-medium">{order!.id}</p>
+                <p className="text-sm mt-2">Pedido Valor</p>
+                <p className="font-medium">{order!.value}</p>
+                <p className="text-sm mt-2">Descrição</p>
+                <p className="font-medium">{order!.description}</p>
+                <p className="text-sm mt-2">Status do Pedido</p>
+                <p className="font-medium">{order!.status}</p>
             </div>
         </div>
     )

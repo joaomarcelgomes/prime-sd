@@ -113,16 +113,6 @@ namespace OrderSystem.Order.API.Services
          */
         public async Task<Result> UpdateUser(UserRequest userUpdate, int userId)
         {
-            if (userUpdate.Password.Length < 8)
-            {
-                return new Result()
-                {
-                    Success = false,
-                    Message = "A senha precisa ter pelo menos 8 caracteres.",
-                    Data = new UserViewModel()
-                };
-            }
-
             var user = await _dbContext.Users.FirstOrDefaultAsync(user => user.Id == userId);
 
             if (user == null)
@@ -151,7 +141,7 @@ namespace OrderSystem.Order.API.Services
             if (!string.IsNullOrWhiteSpace(userUpdate.Email))
                 user.Email = userUpdate.Email;
 
-            if (!string.IsNullOrEmpty(userUpdate.Password))
+            if (!string.IsNullOrEmpty(userUpdate.Password) && userUpdate.Password.Length >= 8)
                 user.Password = BCrypt.Net.BCrypt.HashPassword(userUpdate.Password); 
 
             await _dbContext.SaveChangesAsync();

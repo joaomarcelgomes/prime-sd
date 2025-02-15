@@ -9,27 +9,19 @@ export type Order = {
   
 export const fetchOrders = async (): Promise<Order[]> => {
   try {
-    // const response = await fetch("https://api.example.com/orders");
-    // if (!response.ok) {
-    //   throw new Error("Erro ao buscar pedidos");
-    // }
+    const response = await fetch(`${config.apiUrl}/order`, {
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
 
-    return [
-        {
-            id: "1",
-            value: "R$ 100,00",
-            description: "Pedido de teste",
-            status: "Em andamento",
-        },
-        {
-            id: "2",
-            value: "R$ 200,00",
-            description: "Pedido de teste 2",
-            status: "Em andamento",
-        },
-    ];
+    if (!response.ok) {
+      throw new Error("Erro ao buscar pedidos");
+    }
 
-    // return await response.json();
+    const result = await response.json();
+
+    return result.data.map((order: any) => ({ id: order.id, value: order.price, description: order.description, status: order.status }));
   } catch (error) {
     console.error(error);
     throw error;
@@ -47,7 +39,7 @@ export const createOrder = async (value: string, description: string): Promise<O
         "Content-Type": "application/json",
         "Authorization": `Bearer ${token}`,
       },
-      body: JSON.stringify({ value, description }),
+      body: JSON.stringify({ price: value, description }),
     });
     
     return await response.json();

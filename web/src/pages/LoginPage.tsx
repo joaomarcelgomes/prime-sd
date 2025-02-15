@@ -28,7 +28,7 @@ function LoginPage() {
         className={`w-full py-2 px-4 rounded-lg transition ${
           !formData.email || !formData.password || isLoading
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "bg-gray-500 text-white hover:bg-gray-600"
+            : "bg-[#29638A] text-white hover:bg-gray-600"
         }`}
       >
         {isLoading ? "Entrando..." : "Entrar"}

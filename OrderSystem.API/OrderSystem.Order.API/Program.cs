@@ -5,8 +5,11 @@ using Microsoft.IdentityModel.Tokens;
 using OrderSystem.Order.API.Infrastructure.Database;
 using OrderSystem.Order.API.Services;
 using OrderSystem.Order.API.Services.Interfaces;
+using Grpc.Net.Client;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddGrpc();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -90,6 +93,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<OrderClient>();
 
 app.UseCors("AllowAll");
 

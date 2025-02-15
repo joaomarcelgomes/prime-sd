@@ -1,0 +1,84 @@
+version: "3.9"
+
+services:
+  # 🔹 Banco de Dados PostgreSQL
+  postgres:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
+      interval: 10s
+      retries: 5
+
+  # 🔹 Backend Express (Notificações)
+  notification_api:
+    build:
+      context: ./OrderSystem.API/OrderSystem.Notification.API
+      dockerfile: Dockerfile
+    container_name: notification_api
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://myuser:mypassword@postgres_db:5432/mydatabase"
+
+  # 🔹 Backend C# (Pedidos) + Migrations
+  order_api:
+    build:
+      context: ./OrderSystem.API/OrderSystem.Order.API
+      dockerfile: Dockerfile
+    container_name: order_api
+    restart: always
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__DefaultConnection: "Host=postgres_db;Port=5432;Database=mydatabase;Username=myuser;Password=mypassword"
+    command: >
+      sh -c "dotnet ef database update && dotnet OrderSystem.Order.API.dll"
+
+  # 🔹 Backend Python (Pagamentos)
+  payment_api:
+    build:
+      context: ./OrderSystem.API/OrderSystem.Payment.API
+      dockerfile: Dockerfile
+    container_name: payment_api
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: "postgresql://myuser:mypassword@postgres_db:5432/mydatabase"
+
+  # 🔹 Frontend React
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    container_name: web_frontend
+    restart: always
+    ports:
+      - "5173:5173"
+    depends_on:
+      - order_api
+      - notification_api
+      - payment_api
+
+volumes:
+  postgres_data:

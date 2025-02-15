@@ -36,7 +36,7 @@ export function FieldComponent({
         className={`w-full p-3 border rounded-md focus:outline-none focus:ring-2 ${
           error
             ? "border-red-500 focus:ring-red-400 focus:border-red-500"
-            : "border-gray-300 focus:ring-blue-400 focus:border-blue-400"
+            : "border-[#29638A] focus:border-[#29638A]"
         }`}
         id={uniqueId}
         name={name}

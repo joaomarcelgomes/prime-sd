@@ -21,5 +21,5 @@ export function useOrders() {
     loadOrders();
   }, []);
 
-  return { orders, isLoading, error };
+  return { orders, isLoading, error, setOrders };
 }

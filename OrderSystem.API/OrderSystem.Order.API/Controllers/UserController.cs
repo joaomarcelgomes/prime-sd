@@ -23,7 +23,7 @@ namespace OrderSystem.Order.API.Controllers
 
                 return BadRequest(result);
             }
-            catch
+            catch(Exception)
             {
                 return BadRequest(new { success = false, message = "Error ao tentar criar o usuário" });
             }

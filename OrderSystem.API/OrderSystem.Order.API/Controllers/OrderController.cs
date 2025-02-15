@@ -11,11 +11,11 @@ using OrderSystem.Order.API.Models.DTOs.User;
 namespace OrderSystem.Order.API.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/order")]
     public class OrderController(IOrderService orderService) : ControllerBase
     {
-
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreateOrder([FromBody] OrderRequest order)
         {
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);

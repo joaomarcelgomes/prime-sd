@@ -31,7 +31,7 @@ namespace OrderSystem.Order.API.Services
                 UserId = userId,
             };
 
-            _dbContext.Orders.Add(createdOrder);
+            await _dbContext.Orders.AddAsync(createdOrder);
             await _dbContext.SaveChangesAsync();
 
             try
@@ -42,21 +42,11 @@ namespace OrderSystem.Order.API.Services
             {
                 createdOrder.Status = "Falha no processamento do pagamento";
                 await _dbContext.SaveChangesAsync();
-
-                return new Result
-                {
-                    Success = false,
-                    Message = "Falha no processamento do pagamento",
-                    Data = new OrderViewModel()
-                    {
-                        Id = createdOrder.Id,
-                        Price = order.Price,
-                        Description = createdOrder.Description,
-                        Status = createdOrder.Status,
-                        UserId = createdOrder.UserId,
-                    }
-                };
             }
+
+            var client = new OrderClient();
+
+            await client.SendOrderAsync(createdOrder.Id, (double) createdOrder.Price, createdOrder.Description, createdOrder.Status);
 
             return new Result
             {
